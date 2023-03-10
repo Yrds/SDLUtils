@@ -41,6 +41,22 @@ inline Renderer createRenderer(Args ...args) {
   };
 }
 
+using Texture = std::unique_ptr<SDL_Texture, std::function<void (SDL_Texture*)>>;
+
+template<typename... Args>
+inline Texture imgLoadTexture(Args ...args) {
+  return {
+    IMG_LoadTexture(std::forward<Args>(args)...),
+    SDL_DestroyTexture,
+  };
+}
+
+
+inline bool testCollision(SDL_Rect &rectA, SDL_Rect &rectB) {
+  return (rectA.x < rectB.x + rectB.w && rectA.x + rectA.w > rectB.x &&
+          rectA.y < rectB.y + rectB.h && rectA.h + rectA.y > rectB.y);
+}
+
 }
 
 
